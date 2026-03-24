@@ -1,18 +1,20 @@
-# 1. Use an official, lightweight Python image
-FROM python:3.11-slim
+# 1. Use a lightweight Python base image
+FROM python:3.12-slim
 
-# 2. Set the working directory inside the container
+# 2. Install our lightning-fast package manager
+RUN pip install uv
+
+# 3. Set our working directory inside the container
 WORKDIR /app
 
-# 3. Copy the requirements file and install dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# 4. Copy ONLY the project config first (this makes Docker build way faster)
+COPY pyproject.toml .
 
-# 4. Copy your actual code into the container
-COPY main.py .
+# 5. The Magic: Tell uv to read pyproject.toml and install everything globally in the container!
+RUN uv pip install --system -r pyproject.toml
 
-# 5. Expose the port FastAPI runs on
-EXPOSE 8000
+# 6. Copy the rest of your actual code (main.py, etc.)
+COPY . .
 
-# 6. The command to start the server when the container launches
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# 7. Start the FastAPI server
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "10000"]
