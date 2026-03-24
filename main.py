@@ -135,6 +135,10 @@ base_endpoint: str = "/api/v1"
 
 
 # endpoints 
+@app.get("/")
+def read_root():
+    return {"status": "online", "message": "OptiGrid API is running locally and in the cloud!"}
+
 
 @app.post(f"{base_endpoint}/optimize")
 async def optimize_dispatch(request: DispatchRequest):
@@ -150,6 +154,9 @@ async def optimize_dispatch(request: DispatchRequest):
 @app.get(f"{base_endpoint}/health")
 async def health_check():
     return {"status": "ok"}
+
+
+    
 
 
 
