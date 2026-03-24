@@ -1,9 +1,19 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware 
+
+
+
 from pydantic import BaseModel, Field 
 from typing import List, cast 
 from datetime import datetime 
+import pandas as pd
 # import numpy as np
 
+
+
+from openelectricity import OEClient
+from openelectricity.types import MarketMetric
+from datetime import datetime, timedelta
 
 # import math 
 
@@ -19,6 +29,17 @@ app = FastAPI(
     title="Battery Dispatch Optimization API",
     description="Calculates optimal charge/discharge schedules against 30-minute spot prices",
     version="1.0.0"
+)
+
+
+# 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"], # Allows React to talk to FastAPI
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -93,7 +114,7 @@ def calculate_optimal_dispatch(battery: BatterySpecs, market_data: List[MarketIn
         "total_profit_aud": total_profit_aud,
         "schedule": schedule
     }
-    print(f"response: {response}")
+    # print(f"response: {response}")
 
     return response 
 
@@ -133,3 +154,35 @@ async def health_check():
 
 
 
+@app.post("/api/v1/simulate")
+def run_live_simulation(battery: BatterySpecs):
+    # Fetch live data just like we did in pipeline.py
+    try:
+        with OEClient() as client: 
+            response = client.get_market(
+                network_code="NEM",
+                network_region="SA1", 
+                metrics=[MarketMetric.PRICE],
+                interval="5m",
+                date_start=datetime.now() - timedelta(days=1)
+            )
+
+            # Wrangle the Pandas data into 30-min intervals
+            df = response.to_pandas()
+            df["interval"] = pd.to_datetime(df["interval"])
+            df = df.set_index("interval").resample("30min").mean().reset_index().tail(48)
+            
+            # Format it for the PuLP engine
+            market_data = [
+                MarketInterval(
+                    timestamp=row["interval"].isoformat(),
+                    price_aud_mwh=float(row['price']) if pd.notna(row['price']) else 0.0
+                )
+                for _, row in df.iterrows()
+            ]
+            
+            # Run the math engine and return the result to React!
+            return calculate_optimal_dispatch(battery, market_data)
+
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
