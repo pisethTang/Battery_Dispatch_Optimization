@@ -12,8 +12,3 @@
 5. The Superpower Institute [webpage](https://preview.superpowerinstitute.com.au/)
 6. Open Electricity [API](https://docs.openelectricity.org.au/api-reference/overview)
 
-Will be deleted soon
---------
-curl -X GET \
-    -H "Authorization: Bearer oe_HPoccPEXzRspMuDpC5dDkn" \
-    https://api.openelectricity.org.au/v4/me
