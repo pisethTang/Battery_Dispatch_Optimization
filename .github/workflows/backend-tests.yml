@@ -29,4 +29,7 @@ jobs:
     # (uv is so smart it will automatically read your pyproject.toml, 
     # install FastAPI, PuLP, etc., and run the tests in one command)
     - name: Run Tests
+      env:
+        # This securely pulls the encrypted key from GitHub Settings
+        OPENELECTRICITY_API_KEY: ${{ secrets.OPENELECTRICITY_API_KEY }}
       run: uv run pytest
