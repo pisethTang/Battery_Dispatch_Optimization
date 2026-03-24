@@ -87,11 +87,15 @@ def calculate_optimal_dispatch(battery: BatterySpecs, market_data: List[MarketIn
     objective_value = cast(float | None, pulp.value(prob.objective))
     total_profit_aud = round(objective_value, 2) if objective_value is not None else 0.0
 
-    return {
+
+    response = {
         "optimization_status": pulp.LpStatus[prob.status],
         "total_profit_aud": total_profit_aud,
         "schedule": schedule
     }
+    print(f"response: {response}")
+
+    return response 
 
 
 
@@ -120,23 +124,5 @@ async def optimize_dispatch(request: DispatchRequest):
         # If the math fails, return a clean 500 error to the client
         raise HTTPException(status_code=500, detail=str(e))
 
-
-
-
-# @app.post("/api/v1/optimize")
-# async def optimize_dispatch(request: DispatchRequest):
-#     """
-#     Accepts battery specs and a 24-hour price forecast.
-#     Currently returns the validated payload. Optimization logic coming next.
-#     """
-    
-#     # For now, we just prove the data made it through validation safely
-#     interval_count = len(request.market_data)
-    
-#     return {
-#         "status": "success",
-#         "message": f"Successfully received battery specs and {interval_count} pricing intervals.",
-#         "received_battery_capacity": request.battery.capacity_mwh
-#     }
 
 
