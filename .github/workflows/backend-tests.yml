@@ -1,0 +1,35 @@
+name: Backend CI Pipeline
+
+# 1. When should this run? Every time you push code to the main branch!
+on:
+  push:
+    branches: [ "main" ] # executes the pipeline when a code is merged to main 
+  pull_request:
+    branches: [ "main" ] # and when a pull request is opened against main
+
+jobs:
+  test:
+    # 2. What kind of server should GitHub spin up for us?
+    runs-on: ubuntu-latest
+
+    steps:
+    # 3. Download your code onto the GitHub server
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # 4. Install the ultra-fast 'uv' package manager
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+
+    # 5. Tell uv to install Python 3.12
+    - name: Set up Python 3.12
+      run: uv python install 3.12
+
+    # 6. Run the Pytest suite! 
+    # (uv is so smart it will automatically read your pyproject.toml, 
+    # install FastAPI, PuLP, etc., and run the tests in one command)
+    - name: Run Tests
+      env:
+        # This securely pulls the encrypted key from GitHub Settings
+        OPENELECTRICITY_API_KEY: ${{ secrets.OPENELECTRICITY_API_KEY }}
+      run: uv run pytest
