@@ -110,11 +110,12 @@ def calculate_optimal_dispatch(battery: BatterySpecs, market_data: List[MarketIn
 
 
 
+base_endpoint: str = "/api/v1"
 
 
 # endpoints 
 
-@app.post("/api/v1/optimize")
+@app.post(f"{base_endpoint}/optimize")
 async def optimize_dispatch(request: DispatchRequest):
     try:
         # Pass the validated JSON data directly into the math engine
@@ -123,6 +124,12 @@ async def optimize_dispatch(request: DispatchRequest):
     except Exception as e:
         # If the math fails, return a clean 500 error to the client
         raise HTTPException(status_code=500, detail=str(e))
+
+# health check
+@app.get(f"{base_endpoint}/health")
+async def health_check():
+    return {"status": "ok"}
+
 
 
 
