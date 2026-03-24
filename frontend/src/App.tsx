@@ -42,7 +42,13 @@ export default function App() {
     // 4. network request 
     const handleRunOptimization = async () => {
         setIsOptimizing(true); 
-        const base_url = "http://localhost:8000/api/v1";
+
+
+        // Fallback to localhost just in case the env variable is missing
+        const base_url = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api/v1";
+
+
+        
         try {
             const payload = {
                 method: "POST",
