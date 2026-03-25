@@ -41,7 +41,11 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"], # Allows React to talk to FastAPI
+    allow_origins=[
+        "http://localhost:5173",                  # local 
+        "https://d2zg9d8ixwrq14.cloudfront.net",  # production
+        
+    ], # Allows React to talk to FastAPI
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
