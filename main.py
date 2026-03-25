@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, APIRouter
 from fastapi.middleware.cors import CORSMiddleware 
 
 
@@ -22,6 +22,11 @@ import pulp
 
 
 
+
+# create a router with a prefix 
+router = APIRouter(
+    prefix="/api/v1",
+)
 
 
 # initialize the api 
@@ -125,22 +130,13 @@ def calculate_optimal_dispatch(battery: BatterySpecs, market_data: List[MarketIn
 
 
 
-
-
-
-
-
-
-base_endpoint: str = "/api/v1"
-
-
 # endpoints 
-@app.get("/")
+@router.get("/")
 def read_root():
     return {"status": "online", "message": "OptiGrid API is running locally and in the cloud!"}
 
 
-@app.post(f"{base_endpoint}/optimize")
+@router.post(f"/optimize")
 async def optimize_dispatch(request: DispatchRequest):
     try:
         # Pass the validated JSON data directly into the math engine
@@ -151,7 +147,7 @@ async def optimize_dispatch(request: DispatchRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 # health check
-@app.get(f"{base_endpoint}/health")
+@router.get(f"/health")
 async def health_check():
     return {"status": "ok"}
 
@@ -161,7 +157,7 @@ async def health_check():
 
 
 
-@app.post("/api/v1/simulate")
+@router.post(f"/simulate")
 def run_live_simulation(battery: BatterySpecs):
     # Fetch live data just like we did in pipeline.py
     try:
@@ -193,3 +189,9 @@ def run_live_simulation(battery: BatterySpecs):
 
     except Exception as e:
         return {"status": "error", "message": str(e)}
+    
+
+
+
+# include router in the app 
+app.include_router(router)
