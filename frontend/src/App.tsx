@@ -19,11 +19,6 @@ import {
 import type { ScheduleAction } from './types';
 
 
-// --- 1. MOCK DATA ---
-// We use fake data that perfectly matches your backend JSON contract to test the UI safely.
-
-
-
 
 export default function App() {
     // State for the left sidebar controls
