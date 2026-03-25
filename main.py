@@ -44,6 +44,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",                  # local 
         "https://d2zg9d8ixwrq14.cloudfront.net",  # production
+        "https://optigrid.seth-tang.me",          # (subdomain of seth-tang.me) - production
         
     ], # Allows React to talk to FastAPI
     allow_credentials=True,
