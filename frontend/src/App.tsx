@@ -101,7 +101,7 @@ export default function App() {
       <div className="w-80 border-r border-gray-800 bg-gray-900 p-6 flex flex-col gap-6 shadow-xl z-10">
         <div>
           <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
-            OptiGrid Analyzer
+            Battery Dispatch Analyzer
           </h1>
           <p className="text-sm text-gray-400 mt-1">SA1 Dispatch Optimization</p>
         </div>
