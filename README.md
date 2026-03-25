@@ -6,8 +6,27 @@ This project computes optimal battery charge/discharge schedules for energy arbi
 
 ## System Flow (End-to-End)
 
-### Run Optimization
 
+### Diagram
+
+```mermaid
+sequenceDiagram
+    participant UI as React UI
+        participant API as FastAPI
+    participant OE as Open Electricity API
+        participant SOLVER as Optimizer
+            
+            UI->>API: POST /simulate
+    API->>OE: fetch_market_data
+    OE->>API: spot prices
+    API->>API: resample 30min
+    API->>SOLVER: run solver
+    SOLVER->>API: schedule
+    API->>UI: JSON response
+    UI->>UI: render chart
+```
+### Diagram Explanation
+            
 1. You configure **Battery Capacity** and **Max Power Output** in the UI.
 2. You click **Run Optimization** in the React app.
 3. The frontend sends a POST request to the FastAPI server at `/simulate`.
@@ -17,25 +36,6 @@ This project computes optimal battery charge/discharge schedules for energy arbi
 7. The PuLP solver in `calculate_optimal_dispatch()` computes the optimal schedule.
 8. The backend returns the schedule, total profit, and status to the frontend.
 9. The React app renders the dispatch schedule chart with State of Charge and Spot Price.
-
-### Diagram
-
-```mermaid
-sequenceDiagram
-    participant UI as React UI
-    participant API as FastAPI
-    participant OE as Open Electricity API
-    participant SOLVER as Optimizer
-
-    UI->>API: POST /simulate
-    API->>OE: fetch_market_data
-    OE->>API: spot prices
-    API->>API: resample 30min
-    API->>SOLVER: run solver
-    SOLVER->>API: schedule
-    API->>UI: JSON response
-    UI->>UI: render chart
-```
 
 ## Core Algorithms
 
