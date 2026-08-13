@@ -37,34 +37,73 @@ sequenceDiagram
 8. The backend returns the schedule, total profit, and status to the frontend.
 9. The React app renders the dispatch schedule chart with State of Charge and Spot Price.
 
+## Key Concepts
+
+Before the math, here are the physical things being modeled:
+
+- **Grid:** the electricity network. The battery can pull power from it or push power into it.
+- **Battery / Energy Storage System:** a device that stores electricity. It does **not** generate electricity. A solar panel generates electricity; a battery only stores it.
+- **Charge:** pulling electricity from the grid into the battery.
+- **Discharge:** pushing electricity from the battery into the grid.
+- **State of Charge (SoC):** the amount of energy currently stored in the battery, measured in MWh.
+- **Spot price:** the wholesale market price of electricity at a specific time, measured in AUD/MWh. In this project prices come from AEMO (Australian Energy Market Operator) via the Open Electricity API.
+- **MW (megawatt):** a unit of power — the *rate* at which electricity moves.
+- **MWh (megawatt-hour):** a unit of energy — the *total amount* of electricity moved. `MWh = MW × hours`.
+
+See the visual diagrams in `images/`:
+- [`images/battery_vs_solar.svg`](images/battery_vs_solar.svg)
+- [`images/system_architecture.svg`](images/system_architecture.svg)
+- [`images/arbitrage_cycle.svg`](images/arbitrage_cycle.svg)
+- [`images/formula_notation.svg`](images/formula_notation.svg)
+
 ## Core Algorithms
 
 ### 1) Linear Programming Formulation (PuLP)
 
-We formulate battery dispatch as a linear programming problem where the objective is to maximize arbitrage profit over a 24-hour horizon (48 x 30-minute intervals).
+We formulate battery dispatch as a linear programming problem where the objective is to maximize arbitrage profit over a 24-hour horizon ($48 \times 30$-minute intervals).
 
-**Decision Variables:**
-- $charge_t$: Charging power at time $t$ (MW)
-- $discharge_t$: Discharging power at time $t$ (MW)
-- $soc_t$: State of Charge at time $t$ (MWh)
+**Parameters (given):**
 
-**Objective Function:**
+| Symbol | Meaning | Unit |
+|---|---|---|
+| $C$ | battery capacity | MWh |
+| $P$ | max charge/discharge power | MW |
+| $\eta$ | charging efficiency | unitless |
+| $\Delta t$ | length of one interval | 0.5 hours |
+| $T$ | number of intervals | 48 |
+
+**Decision variables (chosen by the solver):**
+
+| Symbol | Meaning | Unit |
+|---|---|---|
+| $c(t)$ | charging power at interval $t$ | MW |
+| $d(t)$ | discharging power at interval $t$ | MW |
+| $s(t)$ | state of charge at interval $t$ | MWh |
+
+**Market data (fetched from AEMO):**
+
+| Symbol | Meaning | Unit |
+|---|---|---|
+| $p(t)$ | spot price at interval $t$ | AUD/MWh |
+
+**Objective function:**
+
+Maximize total profit $\Pi$ over the 24-hour horizon:
 
 $$
-\max \sum_{t=1}^{T} (discharge_t - charge_t) \cdot price_t \cdot \Delta t
+\max \Pi = \sum_{t=1}^{T} \big( d(t) - c(t) \big) \cdot p(t) \cdot \Delta t
 $$
 
-Where $\Delta t = 0.5$ hours (30 minutes).
+Each term $\big( d(t) - c(t) \big) \cdot \Delta t$ is the net energy sold (in MWh) during interval $t$. Multiplying by $p(t)$ gives the profit or cost for that interval in AUD.
 
 **Constraints:**
 
-1. **Power limits:** $0 \leq charge_t \leq max\_mw$, $0 \leq discharge_t \leq max\_mw$
-2. **Capacity limits:** $0 \leq soc_t \leq capacity\_mwh$
-3. **Energy balance:** 
-   $$soc_t = soc_{t-1} + (charge_t \cdot \eta - discharge_t) \cdot \Delta t$$
-4. **Initial condition:** $soc_0 = 0$ (empty battery)
+1. **Power limits:** $0 \leq c(t) \leq P$, $0 \leq d(t) \leq P$
+2. **Capacity limits:** $0 \leq s(t) \leq C$
+3. **Energy balance:** $s(t) = s(t-1) + \big( \eta \cdot c(t) - d(t) \big) \cdot \Delta t$
+4. **Initial condition:** $s(0) = 0$ (battery starts empty)
 
-Where $\eta = 0.9$ is the round-trip efficiency.
+The efficiency $\eta$ means only a fraction of purchased energy actually enters storage; the rest is lost.
 
 Implementation: [main.py](main.py) - `calculate_optimal_dispatch()`
 
