@@ -60,7 +60,7 @@ See the visual diagrams in `images/`:
 
 ### 1) Linear Programming Formulation (PuLP)
 
-We formulate battery dispatch as a linear programming problem where the objective is to maximize arbitrage profit over a 24-hour horizon ($48 \times 30$-minute intervals).
+We formulate battery dispatch as a linear programming problem where the objective is to maximize arbitrage profit over a 24-hour horizon ($48 \times 30$-minute intervals). Intervals are indexed $t = 0, 1, \dots, T-1$ to match the Python code.
 
 **Parameters (given):**
 
@@ -91,17 +91,20 @@ We formulate battery dispatch as a linear programming problem where the objectiv
 Maximize total profit $\Pi$ over the 24-hour horizon:
 
 $$
-\max \Pi = \sum_{t=1}^{T} \big( d(t) - c(t) \big) \cdot p(t) \cdot \Delta t
+\max \Pi = \sum_{t=0}^{T-1} \big( d(t) - c(t) \big) \cdot p(t) \cdot \Delta t
 $$
 
 Each term $\big( d(t) - c(t) \big) \cdot \Delta t$ is the net energy sold (in MWh) during interval $t$. Multiplying by $p(t)$ gives the profit or cost for that interval in AUD.
 
 **Constraints:**
 
-1. **Power limits:** $0 \leq c(t) \leq P$, $0 \leq d(t) \leq P$
-2. **Capacity limits:** $0 \leq s(t) \leq C$
-3. **Energy balance:** $s(t) = s(t-1) + \big( \eta \cdot c(t) - d(t) \big) \cdot \Delta t$
-4. **Initial condition:** $s(0) = 0$ (battery starts empty)
+1. **Power limits:** $0 \leq c(t) \leq P$, $0 \leq d(t) \leq P$ for all $t = 0, \dots, T-1$
+2. **Capacity limits:** $0 \leq s(t) \leq C$ for all $t = 0, \dots, T-1$
+3. **Energy balance:**
+   - First interval (battery starts empty):  
+     $$s(0) = \big( \eta \cdot c(0) - d(0) \big) \cdot \Delta t$$
+   - Subsequent intervals:  
+     $$s(t) = s(t-1) + \big( \eta \cdot c(t) - d(t) \big) \cdot \Delta t \quad \text{for } t = 1, \dots, T-1$$
 
 The efficiency $\eta$ means only a fraction of purchased energy actually enters storage; the rest is lost.
 
