@@ -173,10 +173,8 @@ CI/CD pipelines were created for both frontend and backend deployments via GitHu
 
 ## References
 
-[1] Render - [https://battery-dispatch-optimization.onrender.com](https://battery-dispatch-optimization.onrender.com)
-
-[2] CloudFront - [https://d2zg9d8ixwrq14.cloudfront.net](https://d2zg9d8ixwrq14.cloudfront.net)
-
+1. Render - [https://battery-dispatch-optimization.onrender.com](https://battery-dispatch-optimization.onrender.com)
+2. CloudFront - [https://d2zg9d8ixwrq14.cloudfront.net](https://d2zg9d8ixwrq14.cloudfront.net)
 3. FastAPI [tutorial](https://code.visualstudio.com/docs/python/tutorial-fastapi) in VSCode.
 4. [Preventing](https://www.reddit.com/r/ClaudeAI/comments/1qfsbem/claude_code_reading_env_file_or_any_fix_7_months/) agents from reading .env or other confidential files
 5. Open Electricity [Platform](https://openelectricity.org.au/about)
