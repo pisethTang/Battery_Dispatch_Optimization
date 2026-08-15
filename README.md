@@ -39,8 +39,6 @@ sequenceDiagram
 
 ## Key Concepts
 
-Before the math, here are the physical things being modeled:
-
 - **Grid:** the electricity network. The battery can pull power from it or push power into it.
 - **Battery / Energy Storage System:** a device that stores electricity. It does **not** generate electricity. A solar panel generates electricity; a battery only stores it.
 - **Charge:** pulling electricity from the grid into the battery.
@@ -49,12 +47,12 @@ Before the math, here are the physical things being modeled:
 - **Spot price:** the wholesale market price of electricity at a specific time, measured in AUD/MWh. In this project prices come from AEMO (Australian Energy Market Operator) via the Open Electricity API.
 - **MW (megawatt):** a unit of power — the *rate* at which electricity moves.
 - **MWh (megawatt-hour):** a unit of energy — the *total amount* of electricity moved. `MWh = MW × hours`.
-
+<!-- 
 See the visual diagrams in `images/`:
 - [`images/battery_vs_solar.svg`](images/battery_vs_solar.svg)
 - [`images/system_architecture.svg`](images/system_architecture.svg)
 - [`images/arbitrage_cycle.svg`](images/arbitrage_cycle.svg)
-- [`images/formula_notation.svg`](images/formula_notation.svg)
+- [`images/formula_notation.svg`](images/formula_notation.svg) -->
 
 ## Core Algorithms
 
@@ -173,11 +171,10 @@ CI/CD pipelines were created for both frontend and backend deployments via GitHu
 
 ## References
 
-1. Render - [https://battery-dispatch-optimization.onrender.com](https://battery-dispatch-optimization.onrender.com)
-2. CloudFront - [https://d2zg9d8ixwrq14.cloudfront.net](https://d2zg9d8ixwrq14.cloudfront.net)
-3. FastAPI [tutorial](https://code.visualstudio.com/docs/python/tutorial-fastapi) in VSCode.
-4. [Preventing](https://www.reddit.com/r/ClaudeAI/comments/1qfsbem/claude_code_reading_env_file_or_any_fix_7_months/) agents from reading .env or other confidential files
-5. Open Electricity [Platform](https://openelectricity.org.au/about)
-6. The Superpower Institute [webpage](https://preview.superpowerinstitute.com.au/)
-7. Open Electricity [API](https://docs.openelectricity.org.au/api-reference/overview)
-8. PuLP Documentation - [Optimization with PuLP](https://coin-or.github.io/pulp/)
+1. CloudFront - [https://d2zg9d8ixwrq14.cloudfront.net](https://d2zg9d8ixwrq14.cloudfront.net)
+2. FastAPI [tutorial](https://code.visualstudio.com/docs/python/tutorial-fastapi) in VSCode.
+3. [Preventing](https://www.reddit.com/r/ClaudeAI/comments/1qfsbem/claude_code_reading_env_file_or_any_fix_7_months/) agents from reading .env or other confidential files
+4. Open Electricity [Platform](https://openelectricity.org.au/about)
+5. The Superpower Institute [webpage](https://preview.superpowerinstitute.com.au/)
+6. Open Electricity [API](https://docs.openelectricity.org.au/api-reference/overview)
+7. PuLP Documentation - [Optimization with PuLP](https://coin-or.github.io/pulp/)
