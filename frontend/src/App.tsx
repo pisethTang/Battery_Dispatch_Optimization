@@ -91,6 +91,7 @@ export default function App() {
                         Battery Dispatch
                     </h1>
                     <p className="text-sm text-zinc-500 mt-1">SA1 Region Optimization</p>
+                    <a href="#/backtest" className="text-xs text-zinc-500 hover:text-zinc-300 mt-2 inline-block">Forecast backtest →</a>
                 </div>
 
                 <div className="flex flex-col gap-6">

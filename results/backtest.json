@@ -1,0 +1,328 @@
+{
+  "generated_at": "2026-10-12 16:18",
+  "data": {
+    "source": "AEMO NEMWeb aggregated price and demand, SA1 (5-min RRP averaged to 30-min; pre-Oct-2021 native 30-min)",
+    "timezone": "NEM market time (AEST, UTC+10, no daylight saving); intervals labelled by start",
+    "start": "2019-01-01 00:00",
+    "end": "2026-10-11 23:30",
+    "rows": 136368,
+    "days": 2841,
+    "missing_30min_intervals": 0,
+    "partial_30min_intervals": 0,
+    "price_min": -962.1966666666667,
+    "price_max": 20300.0,
+    "gap_handling": "30-min buckets are the mean of whatever 5-min observations exist (partial buckets counted above). Buckets with no observations stay NaN and are never filled in the stored data. Days with any NaN price are excluded as backtest target days; as model inputs, LightGBM takes NaN natively and the LSTM forward-fills.",
+    "n_days_with_missing_intervals": 0
+  },
+  "battery": {
+    "capacity_mwh": 5.0,
+    "max_mw": 2.5,
+    "efficiency": 0.9,
+    "efficiency_applied_to": "charging only (unchanged app LP)",
+    "start_soc_mwh": 0.0,
+    "interval_hours": 0.5
+  },
+  "split": {
+    "train": [
+      "2019-01-01",
+      "2025-07-11"
+    ],
+    "validation": [
+      "2025-07-12",
+      "2025-10-11"
+    ],
+    "test": [
+      "2025-10-12",
+      "2026-10-11"
+    ],
+    "retrain_every_days": 30
+  },
+  "Z_test_days": 365,
+  "chosen_configs": {
+    "naive": {},
+    "lightgbm": {
+      "transform": "asinh",
+      "objective": "l2",
+      "num_leaves": 63,
+      "train_start": "2019-01-01"
+    },
+    "lstm": {
+      "transform": "asinh",
+      "loss": "mse",
+      "hidden": 64
+    }
+  },
+  "retrains": {
+    "naive": [
+      {
+        "retrain_date": "2025-10-12",
+        "trained_through": null,
+        "rounds_or_epochs": null
+      },
+      {
+        "retrain_date": "2025-11-11",
+        "trained_through": null,
+        "rounds_or_epochs": null
+      },
+      {
+        "retrain_date": "2025-12-11",
+        "trained_through": null,
+        "rounds_or_epochs": null
+      },
+      {
+        "retrain_date": "2026-01-10",
+        "trained_through": null,
+        "rounds_or_epochs": null
+      },
+      {
+        "retrain_date": "2026-02-09",
+        "trained_through": null,
+        "rounds_or_epochs": null
+      },
+      {
+        "retrain_date": "2026-03-11",
+        "trained_through": null,
+        "rounds_or_epochs": null
+      },
+      {
+        "retrain_date": "2026-04-10",
+        "trained_through": null,
+        "rounds_or_epochs": null
+      },
+      {
+        "retrain_date": "2026-05-10",
+        "trained_through": null,
+        "rounds_or_epochs": null
+      },
+      {
+        "retrain_date": "2026-06-09",
+        "trained_through": null,
+        "rounds_or_epochs": null
+      },
+      {
+        "retrain_date": "2026-07-09",
+        "trained_through": null,
+        "rounds_or_epochs": null
+      },
+      {
+        "retrain_date": "2026-08-08",
+        "trained_through": null,
+        "rounds_or_epochs": null
+      },
+      {
+        "retrain_date": "2026-09-07",
+        "trained_through": null,
+        "rounds_or_epochs": null
+      },
+      {
+        "retrain_date": "2026-10-07",
+        "trained_through": null,
+        "rounds_or_epochs": null
+      }
+    ],
+    "lightgbm": [
+      {
+        "retrain_date": "2025-10-12",
+        "trained_through": "2025-10-11",
+        "rounds_or_epochs": 185
+      },
+      {
+        "retrain_date": "2025-11-11",
+        "trained_through": "2025-11-10",
+        "rounds_or_epochs": 80
+      },
+      {
+        "retrain_date": "2025-12-11",
+        "trained_through": "2025-12-10",
+        "rounds_or_epochs": 72
+      },
+      {
+        "retrain_date": "2026-01-10",
+        "trained_through": "2026-01-09",
+        "rounds_or_epochs": 150
+      },
+      {
+        "retrain_date": "2026-02-09",
+        "trained_through": "2026-02-08",
+        "rounds_or_epochs": 176
+      },
+      {
+        "retrain_date": "2026-03-11",
+        "trained_through": "2026-03-10",
+        "rounds_or_epochs": 68
+      },
+      {
+        "retrain_date": "2026-04-10",
+        "trained_through": "2026-04-09",
+        "rounds_or_epochs": 108
+      },
+      {
+        "retrain_date": "2026-05-10",
+        "trained_through": "2026-05-09",
+        "rounds_or_epochs": 256
+      },
+      {
+        "retrain_date": "2026-06-09",
+        "trained_through": "2026-06-08",
+        "rounds_or_epochs": 99
+      },
+      {
+        "retrain_date": "2026-07-09",
+        "trained_through": "2026-07-08",
+        "rounds_or_epochs": 96
+      },
+      {
+        "retrain_date": "2026-08-08",
+        "trained_through": "2026-08-07",
+        "rounds_or_epochs": 96
+      },
+      {
+        "retrain_date": "2026-09-07",
+        "trained_through": "2026-09-06",
+        "rounds_or_epochs": 42
+      },
+      {
+        "retrain_date": "2026-10-07",
+        "trained_through": "2026-10-06",
+        "rounds_or_epochs": 46
+      }
+    ],
+    "lstm": [
+      {
+        "retrain_date": "2025-10-12",
+        "trained_through": "2025-10-11",
+        "rounds_or_epochs": 6
+      },
+      {
+        "retrain_date": "2025-11-11",
+        "trained_through": "2025-11-10",
+        "rounds_or_epochs": 20
+      },
+      {
+        "retrain_date": "2025-12-11",
+        "trained_through": "2025-12-10",
+        "rounds_or_epochs": 18
+      },
+      {
+        "retrain_date": "2026-01-10",
+        "trained_through": "2026-01-09",
+        "rounds_or_epochs": 14
+      },
+      {
+        "retrain_date": "2026-02-09",
+        "trained_through": "2026-02-08",
+        "rounds_or_epochs": 9
+      },
+      {
+        "retrain_date": "2026-03-11",
+        "trained_through": "2026-03-10",
+        "rounds_or_epochs": 5
+      },
+      {
+        "retrain_date": "2026-04-10",
+        "trained_through": "2026-04-09",
+        "rounds_or_epochs": 14
+      },
+      {
+        "retrain_date": "2026-05-10",
+        "trained_through": "2026-05-09",
+        "rounds_or_epochs": 8
+      },
+      {
+        "retrain_date": "2026-06-09",
+        "trained_through": "2026-06-08",
+        "rounds_or_epochs": 11
+      },
+      {
+        "retrain_date": "2026-07-09",
+        "trained_through": "2026-07-08",
+        "rounds_or_epochs": 16
+      },
+      {
+        "retrain_date": "2026-08-08",
+        "trained_through": "2026-08-07",
+        "rounds_or_epochs": 19
+      },
+      {
+        "retrain_date": "2026-09-07",
+        "trained_through": "2026-09-06",
+        "rounds_or_epochs": 18
+      },
+      {
+        "retrain_date": "2026-10-07",
+        "trained_through": "2026-10-06",
+        "rounds_or_epochs": 8
+      }
+    ]
+  },
+  "perfect_foresight_aud": 560314.3511249999,
+  "models": {
+    "naive": {
+      "capture_rate": 0.2719056986239471,
+      "realised_aud": 152352.66509166668,
+      "mae": 80.04433837519025,
+      "rmse": 584.1204242470058,
+      "days_with_loss": 85
+    },
+    "lightgbm": {
+      "capture_rate": 0.4949221742102672,
+      "realised_aud": 277311.9969,
+      "mae": 57.75984683798546,
+      "rmse": 417.2313257763026,
+      "days_with_loss": 32
+    },
+    "lstm": {
+      "capture_rate": 0.6182133339160598,
+      "realised_aud": 346393.80305,
+      "mae": 51.194683588702205,
+      "rmse": 413.8813834823171,
+      "days_with_loss": 28
+    }
+  },
+  "quarterly": [
+    {
+      "quarter": "2025Q4",
+      "days": 81,
+      "perfect_foresight_aud": 100628.05439166666,
+      "naive_capture_rate": 0.3494813534284034,
+      "lightgbm_capture_rate": 0.5403161474570122,
+      "lstm_capture_rate": 0.5931140610089076
+    },
+    {
+      "quarter": "2026Q1",
+      "days": 90,
+      "perfect_foresight_aud": 250285.0319166667,
+      "naive_capture_rate": 0.2443953712756034,
+      "lightgbm_capture_rate": 0.4551541104061288,
+      "lstm_capture_rate": 0.6763545250268749
+    },
+    {
+      "quarter": "2026Q2",
+      "days": 91,
+      "perfect_foresight_aud": 123472.04622500001,
+      "naive_capture_rate": 0.2977050231111937,
+      "lightgbm_capture_rate": 0.5882949215698073,
+      "lstm_capture_rate": 0.6236366892687737
+    },
+    {
+      "quarter": "2026Q3",
+      "days": 92,
+      "perfect_foresight_aud": 73280.31189166667,
+      "naive_capture_rate": 0.2348284925484454,
+      "lightgbm_capture_rate": 0.4347850283502483,
+      "lstm_capture_rate": 0.4908676069298211
+    },
+    {
+      "quarter": "2026Q4",
+      "days": 11,
+      "perfect_foresight_aud": 12648.906700000001,
+      "naive_capture_rate": 0.1620677303280291,
+      "lightgbm_capture_rate": 0.3576287697391797,
+      "lstm_capture_rate": 0.3522712138169748
+    }
+  ],
+  "best_ml_model": "lstm",
+  "X_best_model_capture_pct": 62,
+  "Y_naive_capture_pct": 27,
+  "runtime_seconds": 169
+}

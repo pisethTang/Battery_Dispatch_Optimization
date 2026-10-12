@@ -1,0 +1,270 @@
+{
+  "selection_metric": "validation capture rate (aggregate realised / perfect foresight)",
+  "validation_days": 92,
+  "validation_period": [
+    "2025-07-12",
+    "2025-10-11"
+  ],
+  "models": {
+    "naive": {
+      "chosen": {},
+      "candidates": [
+        {
+          "config": {},
+          "capture_rate": 0.40297795181241913,
+          "realised_aud": 48196.60349166667,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 64.87763285024155,
+          "rmse": 105.83152332360294
+        }
+      ]
+    },
+    "lightgbm": {
+      "chosen": {
+        "transform": "asinh",
+        "objective": "l2",
+        "num_leaves": 63,
+        "train_start": "2019-01-01"
+      },
+      "candidates": [
+        {
+          "config": {
+            "transform": "identity",
+            "objective": "l2",
+            "num_leaves": 15,
+            "train_start": "2019-01-01"
+          },
+          "capture_rate": 0.560704722196811,
+          "realised_aud": 67060.89762499997,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 65.398274899097,
+          "rmse": 96.88518582776094
+        },
+        {
+          "config": {
+            "transform": "identity",
+            "objective": "l2",
+            "num_leaves": 15,
+            "train_start": "2021-10-01"
+          },
+          "capture_rate": 0.5608952884597243,
+          "realised_aud": 67083.68955833332,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 64.10137156892395,
+          "rmse": 92.71054432972596
+        },
+        {
+          "config": {
+            "transform": "identity",
+            "objective": "l2",
+            "num_leaves": 63,
+            "train_start": "2019-01-01"
+          },
+          "capture_rate": 0.5120900457267001,
+          "realised_aud": 61246.52918333333,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 67.52519454386629,
+          "rmse": 99.29004782800256
+        },
+        {
+          "config": {
+            "transform": "identity",
+            "objective": "l2",
+            "num_leaves": 63,
+            "train_start": "2021-10-01"
+          },
+          "capture_rate": 0.43313986415659245,
+          "realised_aud": 51804.00117499999,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 78.72568740119341,
+          "rmse": 117.12677062563334
+        },
+        {
+          "config": {
+            "transform": "identity",
+            "objective": "huber",
+            "num_leaves": 15,
+            "train_start": "2019-01-01"
+          },
+          "capture_rate": 0.5571915968332046,
+          "realised_aud": 66640.72399166663,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 54.046942157707434,
+          "rmse": 82.10398789392607
+        },
+        {
+          "config": {
+            "transform": "identity",
+            "objective": "huber",
+            "num_leaves": 15,
+            "train_start": "2021-10-01"
+          },
+          "capture_rate": 0.5427229127273386,
+          "realised_aud": 64910.25355833332,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 53.57625391333525,
+          "rmse": 81.70917871334898
+        },
+        {
+          "config": {
+            "transform": "identity",
+            "objective": "huber",
+            "num_leaves": 63,
+            "train_start": "2019-01-01"
+          },
+          "capture_rate": 0.6010127213051469,
+          "realised_aud": 71881.77837499998,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 53.65696249037422,
+          "rmse": 81.6678959998294
+        },
+        {
+          "config": {
+            "transform": "identity",
+            "objective": "huber",
+            "num_leaves": 63,
+            "train_start": "2021-10-01"
+          },
+          "capture_rate": 0.5847791552651892,
+          "realised_aud": 69940.22613333334,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 52.74036875395477,
+          "rmse": 80.97705158450324
+        },
+        {
+          "config": {
+            "transform": "asinh",
+            "objective": "l2",
+            "num_leaves": 15,
+            "train_start": "2019-01-01"
+          },
+          "capture_rate": 0.6069494564178713,
+          "realised_aud": 72591.81838333329,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 52.6757823942645,
+          "rmse": 81.50082458025217
+        },
+        {
+          "config": {
+            "transform": "asinh",
+            "objective": "l2",
+            "num_leaves": 15,
+            "train_start": "2021-10-01"
+          },
+          "capture_rate": 0.5719920045658219,
+          "realised_aud": 68410.8689333333,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 53.94460613546903,
+          "rmse": 82.36467809522563
+        },
+        {
+          "config": {
+            "transform": "asinh",
+            "objective": "l2",
+            "num_leaves": 63,
+            "train_start": "2019-01-01"
+          },
+          "capture_rate": 0.6118518616575961,
+          "realised_aud": 73178.1514083333,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 52.674186039748164,
+          "rmse": 82.02240054081157
+        },
+        {
+          "config": {
+            "transform": "asinh",
+            "objective": "l2",
+            "num_leaves": 63,
+            "train_start": "2021-10-01"
+          },
+          "capture_rate": 0.5977082425854865,
+          "realised_aud": 71486.55910833334,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 53.113706035097536,
+          "rmse": 81.74963890727432
+        }
+      ]
+    },
+    "lstm": {
+      "chosen": {
+        "transform": "asinh",
+        "loss": "mse",
+        "hidden": 64
+      },
+      "candidates": [
+        {
+          "config": {
+            "transform": "identity",
+            "loss": "mse",
+            "hidden": 32
+          },
+          "capture_rate": 0.4925821084121137,
+          "realised_aud": 58913.358558333304,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 67.43320717021199,
+          "rmse": 118.07194769615228
+        },
+        {
+          "config": {
+            "transform": "identity",
+            "loss": "mse",
+            "hidden": 64
+          },
+          "capture_rate": 0.5324680288805272,
+          "realised_aud": 63683.75824166664,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 59.661656320805164,
+          "rmse": 98.2999552947027
+        },
+        {
+          "config": {
+            "transform": "identity",
+            "loss": "huber",
+            "hidden": 32
+          },
+          "capture_rate": 0.6422379869750298,
+          "realised_aud": 76812.36520833334,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 48.637878238853524,
+          "rmse": 77.12216762795438
+        },
+        {
+          "config": {
+            "transform": "identity",
+            "loss": "huber",
+            "hidden": 64
+          },
+          "capture_rate": 0.655472206958287,
+          "realised_aud": 78395.19238333334,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 47.41533121661971,
+          "rmse": 76.16529269547738
+        },
+        {
+          "config": {
+            "transform": "asinh",
+            "loss": "mse",
+            "hidden": 32
+          },
+          "capture_rate": 0.6582431452640094,
+          "realised_aud": 78726.59963333332,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 46.16102092707042,
+          "rmse": 75.88365202690537
+        },
+        {
+          "config": {
+            "transform": "asinh",
+            "loss": "mse",
+            "hidden": 64
+          },
+          "capture_rate": 0.6641631837623202,
+          "realised_aud": 79434.64270833337,
+          "perfect_foresight_aud": 119601.09300000002,
+          "mae": 45.01049785649577,
+          "rmse": 74.66592727789026
+        }
+      ]
+    }
+  }
+}

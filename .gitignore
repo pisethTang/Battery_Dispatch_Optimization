@@ -3,3 +3,5 @@
 .venv/
 .env
 *.svg
+# forecasting: raw NEMWeb downloads are re-fetchable; the processed parquet is committed
+data/raw/

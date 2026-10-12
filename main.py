@@ -4,8 +4,10 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 from pydantic import BaseModel, Field 
-from typing import List, cast 
-from datetime import datetime 
+from typing import List, cast
+from datetime import date, datetime
+from pathlib import Path
+import json
 import pandas as pd
 # import numpy as np
 
@@ -198,5 +200,32 @@ def run_live_simulation(battery: BatterySpecs):
 
 
 
-# include router in the app 
+# backtest results (written by `python -m forecasting.backtest`)
+RESULTS_DIR = Path(__file__).resolve().parent / "results"
+
+
+def _read_json(path: Path):
+    if not path.exists():
+        raise HTTPException(status_code=404, detail=f"{path.name} not found - run `python -m forecasting.backtest`")
+    return json.loads(path.read_text())
+
+
+@router.get("/backtest/days")
+def backtest_days():
+    summary = _read_json(RESULTS_DIR / "backtest.json")
+    index = _read_json(RESULTS_DIR / "daily" / "index.json")
+    return {
+        "summary": {k: summary[k] for k in ("Z_test_days", "split", "battery", "models", "quarterly",
+                                            "best_ml_model", "perfect_foresight_aud", "chosen_configs")},
+        **index,
+    }
+
+
+@router.get("/backtest/day/{day}")
+def backtest_day(day: date):
+    # `day` is parsed as a date, so the filename can only ever be YYYY-MM-DD.json
+    return _read_json(RESULTS_DIR / "daily" / f"{day.isoformat()}.json")
+
+
+# include router in the app
 app.include_router(router)

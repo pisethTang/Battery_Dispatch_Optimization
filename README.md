@@ -119,6 +119,30 @@ Live spot prices are fetched from AEMO via the Open Electricity API:
 
 Implementation: [main.py](main.py) - `run_live_simulation()`
 
+## Day-Ahead Forecasting Backtest
+
+The live optimizer schedules against prices that have already happened (perfect foresight). The [forecasting/](forecasting/) package measures how much of that revenue a real operator could capture by scheduling on **forecast** prices instead.
+
+- **Data:** SA1 prices from AEMO NEMWeb from 2019 onwards, averaged to 30 minutes in AEST and cached in `data/sa1_prices.parquet`.
+- **Models:** a naive baseline (same half-hour yesterday), LightGBM (lagged prices and calendar features) and a PyTorch LSTM (the past 7 days of prices plus calendar features). Each model forecasts all 48 prices of day D using only data up to the end of D-1. A pytest test checks for leakage.
+- **Evaluation:** walk-forward. Hyperparameters are chosen on a 3-month validation window. The final 12 months are the test period, with models retrained every 30 days. Each day, the unchanged LP is run on the forecast, and the resulting schedule is scored at actual prices.
+
+| Model | Share of perfect-foresight revenue (365 test days) |
+|---|---:|
+| Naive (yesterday) | 27% |
+| LightGBM | 49% |
+| LSTM | 62% |
+
+To reproduce (results go to `results/`, see [results/REPORT.md](results/REPORT.md)):
+
+```bash
+uv sync --extra forecast
+uv run python -m forecasting.data       # optional: refresh the AEMO price cache
+uv run python -m forecasting.backtest   # validation -> freeze -> walk-forward test -> report
+```
+
+The API serves the results at `GET /api/v1/backtest/days` and `GET /api/v1/backtest/day/{date}`. The React app shows them on the **Backtest** page (`#/backtest`).
+
 ## Current Limitations
 
 ### Single Market Region
