@@ -127,11 +127,37 @@ The live optimizer schedules against prices that have already happened (perfect 
 - **Models:** a naive baseline (same half-hour yesterday), LightGBM (lagged prices and calendar features) and a PyTorch LSTM (the past 7 days of prices plus calendar features). Each model forecasts all 48 prices of day D using only data up to the end of D-1. A pytest test checks for leakage.
 - **Evaluation:** walk-forward. Hyperparameters are chosen on a 3-month validation window. The final 12 months are the test period, with models retrained every 30 days. Each day, the unchanged LP is run on the forecast, and the resulting schedule is scored at actual prices.
 
-| Model | Share of perfect-foresight revenue (365 test days) |
-|---|---:|
-| Naive (yesterday) | 27% |
-| LightGBM | 49% |
-| LSTM | 62% |
+### Results
+
+The test period ran from 12 Oct 2025 to 11 Oct 2026 (365 days). The battery was 5 MWh / 2.5 MW / 90% efficiency. With perfect foresight it would have earned **$560,314**.
+
+| Model | Capture rate | Realised revenue (AUD) | MAE (AUD/MWh) | RMSE (AUD/MWh) | Days with a loss |
+|---|---:|---:|---:|---:|---:|
+| Naive (yesterday) | 27.2% | 152,353 | 80.0 | 584.1 | 85 |
+| LightGBM | 49.5% | 277,312 | 57.8 | 417.2 | 32 |
+| **LSTM** | **61.8%** | **346,394** | **51.2** | **413.9** | **28** |
+
+*Capture rate = total realised revenue ÷ total perfect-foresight revenue over all test days.*
+
+- **The LSTM won.** It captured 62% of perfect-foresight revenue, against 49% for LightGBM and 27% for the naive baseline. It also had the lowest forecast error. It won every full quarter of the test year (49–68%) and only tied LightGBM in the 11-day partial quarter at the end.
+- **Both ML models more than doubled the naive baseline's revenue** and had about a third as many losing days (28–32 vs 85).
+- **Revenue depends on timing, not average accuracy.** South Australian revenue is dominated by a few extreme price spikes, so capture rates vary a lot from quarter to quarter. Getting the evening peak right matters far more than being accurate overnight.
+
+### When forecasts go wrong
+
+![Backtest page on the worst test day](images/backtest_worst_day.png)
+
+The Backtest page on the **worst test day, 18 May 2026**:
+
+- **What happened:** prices were unusually high from morning to early afternoon (averaging $214/MWh from 06:00 to 14:00), then fell to about $105/MWh over the evening.
+- **What the models expected:** all three forecasts assumed a normal day, with a cheaper middle of the day and the usual 17:30 evening peak.
+- **Result:** every model charged during the expensive daytime and discharged into the cheap evening.
+
+| | Perfect foresight | Naive | LightGBM | LSTM |
+|---|---:|---:|---:|---:|
+| Profit on 18 May 2026 | +$391 | −$649 | −$490 | −$360 |
+
+The LSTM lost the least, but it still lost money. A schedule fixed at the end of the previous day can't react when the day's pattern flips. The fix would be intraday re-optimisation using AEMO pre-dispatch forecasts (see [results/REPORT.md](results/REPORT.md) for the full limitations).
 
 To reproduce (results go to `results/`, see [results/REPORT.md](results/REPORT.md)):
 
