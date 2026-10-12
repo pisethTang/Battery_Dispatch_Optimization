@@ -10,6 +10,7 @@ import {
     Tooltip,
     XAxis, YAxis
 } from 'recharts';
+import NavTabs from './NavTabs';
 import type { ScheduleAction } from './types';
 
 // Loading Overlay Component - Similar to Render's cold start page
@@ -86,6 +87,9 @@ export default function App() {
 
             {/* LEFT SIDEBAR */}
             <div className="w-80 border-r border-zinc-800 bg-[#0f0f0f] p-6 flex flex-col">
+                <div className="mb-6">
+                    <NavTabs active="Live" />
+                </div>
                 <div className="mb-8">
                     <h1 className="text-2xl font-semibold text-white tracking-tight">
                         Battery Dispatch

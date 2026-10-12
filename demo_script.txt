@@ -1,0 +1,149 @@
+OptiGrid Demo Script
+====================
+
+Before you start
+----------------
+- Open optigrid.seth-tang.me in a clean browser tab.
+- Make sure you are on the live site, not a local screenshot.
+- Be ready for the backend to take 5-10 seconds on the first run because the Render service has to wake up.
+
+
+1. Opening pitch (30 seconds)
+-----------------------------
+Say:
+"This is OptiGrid, a battery dispatch optimizer. It takes live wholesale electricity prices from AEMO -- the Australian Energy Market Operator -- and figures out the best times for a battery to charge and discharge to make the most money."
+
+Say:
+"It is a classic energy arbitrage problem: buy electricity when it is cheap, store it, and sell it back when it is expensive."
+
+
+2. Walk through the UI (1 minute)
+---------------------------------
+Point to the left sidebar.
+
+Say:
+"On the left we configure the battery. Right now it is set to 5 MWh of capacity and 2.5 MW max power output."
+
+Explain the two sliders:
+
+- Battery Capacity (5 MWh): the size of the energy tank. Maximum amount of electricity it can hold.
+- Max Power Output (2.5 MW): the size of the pipe. Fastest rate it can charge or discharge.
+
+Say:
+"Think of it like a water tank. Capacity is how big the tank is. Max power is how fast the tap can fill or empty it."
+
+Then point to the three cards on the right.
+
+Say:
+"These three cards will show us the solver status, projected profit, and how much energy we moved through the battery."
+
+
+3. Run the optimization (1 minute)
+----------------------------------
+Click Run Optimization.
+
+Say:
+"When I click this, the frontend sends the battery specs to a FastAPI backend. The backend fetches live AEMO spot prices from the Open Electricity API, resamples them to 30-minute intervals, and runs a linear programming solver to find the optimal schedule."
+
+Wait for the loading screen to finish.
+
+Say:
+"This takes a few seconds because the backend service is waking up and fetching fresh market data."
+
+Once it finishes, the cards update:
+
+- Status: Optimal
+- Projected Profit: e.g. $946.75
+- Energy Cycled: e.g. 23.2 MWh
+
+Say:
+"Status Optimal means the solver found a feasible schedule. Projected profit is the total arbitrage profit over the next 24 hours. Energy cycled tells us how much energy we pulled from the grid into the battery."
+
+
+4. Read the chart (2 minutes)
+-----------------------------
+Point to the chart.
+
+Say:
+"The green line is the spot price in Australian dollars per megawatt-hour. The blue bars are the battery's State of Charge -- how full the battery is at each 30-minute interval."
+
+Then explain the pattern.
+
+Say:
+"The basic strategy is simple: charge when prices are low or negative, discharge when prices are high."
+
+Use the 02:00 example.
+
+Say:
+"At 02:00 the price is negative -- about minus fifteen dollars per MWh. That means the market is paying us to take electricity. So the solver charges the battery as fast as it can. That is why the blue bar jumps up."
+
+Say:
+"At 01:30 the price is over a hundred dollars per MWh, so the battery is empty -- it sold everything it had."
+
+If the employer asks why the chart starts at 02:00:
+
+Say:
+"The chart starts at 02:00 AEST because the Open Electricity API returns a fixed 24-hour window of AEMO data starting at that time. It is not aligned to when I clicked the button. In production I would make the datetime timezone-aware so the window matches the current time."
+
+
+5. Explain the math briefly (1 minute)
+--------------------------------------
+If they want to know how it works under the hood.
+
+Say:
+"The optimizer is a linear program built with PuLP. The decision variables are charge, discharge, and state of charge for each 30-minute interval."
+
+Say:
+"The objective is to maximize profit: sum of (discharge minus charge) times price times half an hour."
+
+Say:
+"The constraints are physical: you cannot charge faster than 2.5 MW, you cannot store more than 5 MWh, and the state of charge has to balance from one interval to the next."
+
+
+6. Mention the architecture (1 minute)
+--------------------------------------
+Say:
+"The stack is React with Tailwind on the frontend, FastAPI on the backend, and PuLP for the optimization. The backend pulls live prices from AEMO via the Open Electricity API. Everything is containerized and deployed through GitHub Actions to Render for the backend and S3 plus CloudFront for the frontend."
+
+
+7. Be honest about limitations (1 minute)
+-----------------------------------------
+Say:
+"A few things to keep in mind. This version assumes perfect foresight of prices, which is fine for a demo but not realistic. In production you would use price forecasts and Model Predictive Control."
+
+Say:
+"It also only optimizes one region, SA1, and ignores things like battery degradation, transmission losses, and FCAS revenue. Those would be the next features to add."
+
+
+8. Clarify what this dashboard is
+---------------------------------
+If they ask whether this controls a real battery.
+
+Say:
+"This is a planning and visualization dashboard. The solver produces a recommended dispatch schedule. In a real deployment that schedule would be sent as setpoints to the battery's control system or SCADA. The battery itself, through its inverter and battery management system, would actually execute it."
+
+
+9. Closing line
+---------------
+Say:
+"So in short: this tool reads live market prices, runs an optimizer, and shows you when to charge and discharge a battery to maximize arbitrage profit."
+
+
+Quick demo checklist
+--------------------
+1. Open optigrid.seth-tang.me
+2. Introduce the project
+3. Explain capacity vs max power
+4. Click Run Optimization
+5. Explain Status, Profit, Energy Cycled
+6. Walk through the chart
+7. Mention the stack
+8. Mention limitations
+9. Clarify dashboard vs real BESS control
+
+
+If something goes wrong
+-----------------------
+- Chart stays empty: wait a bit, then click Run Optimization again. The backend may still be cold-starting.
+- Profit looks weird: prices change every day, so the number will be different each time you run it.
+- Chart starts at 02:00: that is expected because of the API timezone handling. Use it as a chance to talk about production improvements.

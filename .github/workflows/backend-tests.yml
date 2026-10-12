@@ -24,4 +24,4 @@ jobs:
     - name: Run Tests
       env:
         OPENELECTRICITY_API_KEY: ${{ secrets.OPENELECTRICITY_API_KEY }}
-      run: uv run pytest
+      run: uv run --extra forecast pytest

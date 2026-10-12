@@ -24,3 +24,21 @@ dependencies = [
 pythonpath = [
   "."
 ]
+# forecasting/backtest extras (not needed by the deployed API): uv sync --extra forecast
+[project.optional-dependencies]
+forecast = [
+    "holidays>=0.60",
+    "lightgbm>=4.5",
+    "matplotlib>=3.9",
+    "pyarrow>=18.0",
+    "torch>=2.5",
+]
+
+# CPU-only torch wheels (the CUDA build is several GB)
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
